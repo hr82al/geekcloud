@@ -1,8 +1,6 @@
-import org.sqlite.JDBC;
-
 import java.sql.*;
 
-public class Authentification {
+public class Authentication {
     private static Connection connection;
 
     static {
@@ -12,7 +10,7 @@ public class Authentification {
             e.printStackTrace();
         }
         try {
-            connection = DriverManager.getConnection(JDBC.PREFIX + "");
+            connection = DriverManager.getConnection("jdbc:sqlite:" + "base.db");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -32,9 +30,26 @@ public class Authentification {
         }
     }
 
-    public static void main(String[] args) {
-        System.out.println("test");
-        register("user1", "12345");
+    public static boolean login(String user, String password) {
+        final String sql = "SELECT password FROM users WHERE user LIKE '" + user
+                + "' AND password LIKE '" + password + "';";
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            if (resultSet.next()) {
+                String pass = resultSet.getString(resultSet.findColumn("password"));
+                if (pass.equals(password)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     private static void createUsersTable() {
@@ -43,7 +58,6 @@ public class Authentification {
                 + "	user TEXT NOT NULL ,\n"
                 + " password TEXT NOT NULL\n"
                 + ");";
-        System.out.println(sql);
         try {
             Statement stmt = connection.createStatement();
             stmt.execute(sql);
