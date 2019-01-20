@@ -6,6 +6,7 @@
 
     <groupId>ru.geekbrains</groupId>
     <artifactId>geekcloud</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <build>
         <plugins>
@@ -19,6 +20,9 @@
             </plugin>
         </plugins>
     </build>
+    <modules>
+        <module>client</module>
+    </modules>
 
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc -->
