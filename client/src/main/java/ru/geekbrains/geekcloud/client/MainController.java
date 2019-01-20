@@ -1,8 +1,6 @@
-package com.flamexander.netty.example.client;
+package ru.geekbrains.geekcloud.client;
 
-import com.flamexander.netty.example.common.AbstractMessage;
-import com.flamexander.netty.example.common.FileMessage;
-import com.flamexander.netty.example.common.FileRequest;
+
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -10,6 +8,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import ru.geekbrains.common.AbstractMessage;
+import ru.geekbrains.common.FileMessage;
+import ru.geekbrains.common.FileRequest;
 
 import java.io.IOException;
 import java.net.URL;

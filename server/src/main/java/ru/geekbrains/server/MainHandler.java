@@ -1,4 +1,4 @@
-package com.flamexander.netty.example.server;
+package ru.geekbrains.server;
 
 import com.flamexander.netty.example.common.AbstractMessage;
 import com.flamexander.netty.example.common.FileMessage;

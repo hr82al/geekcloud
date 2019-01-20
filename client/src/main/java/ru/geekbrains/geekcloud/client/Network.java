@@ -1,9 +1,8 @@
-package com.flamexander.netty.example.client;
+package ru.geekbrains.geekcloud.client;
 
-import com.flamexander.netty.example.common.AbstractMessage;
 import io.netty.handler.codec.serialization.ObjectDecoderInputStream;
 import io.netty.handler.codec.serialization.ObjectEncoderOutputStream;
-
+import ru.geekbrains.common.AbstractMessage;
 import java.io.IOException;
 import java.net.Socket;
 

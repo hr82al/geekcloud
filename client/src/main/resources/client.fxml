@@ -8,7 +8,7 @@
 <?import javafx.scene.control.ListView?>
 <VBox xmlns:fx="http://javafx.com/fxml/1"
       xmlns="http://javafx.com/javafx/8.0.172-ea"
-      fx:controller="ru.geekbrains.geekcloud.client.Controller">
+      fx:controller="tmp2.Controller">
     <HBox VBox.vgrow="ALWAYS">
         <TextField promptText="логин" HBox.hgrow="ALWAYS"/>
         <TextField promptText="пароль" HBox.hgrow="ALWAYS"/>

@@ -1,4 +1,4 @@
-package com.flamexander.netty.example.common;
+package ru.geekbrains.common;
 
 import java.io.Serializable;
 
