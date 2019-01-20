@@ -7,11 +7,15 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="client" />
+        <module name="common" />
+        <module name="server" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="client" target="8" />
+      <module name="common" target="8" />
       <module name="geekcloud" target="8" />
+      <module name="server" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>
