@@ -10,8 +10,8 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="client" target="7" />
-      <module name="geekcloud" target="7" />
+      <module name="client" target="8" />
+      <module name="geekcloud" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>
