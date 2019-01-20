@@ -6,11 +6,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="client" />
         <module name="geekcloud" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="geekcloud" target="7" />
+      <module name="client" target="8" />
+      <module name="geekcloud" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>
