@@ -1,11 +1,10 @@
 package ru.geekbrains.server;
 
-import com.flamexander.netty.example.common.AbstractMessage;
-import com.flamexander.netty.example.common.FileMessage;
-import com.flamexander.netty.example.common.FileRequest;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.ReferenceCountUtil;
+import ru.geekbrains.common.FileMessage;
+import ru.geekbrains.common.FileRequest;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
