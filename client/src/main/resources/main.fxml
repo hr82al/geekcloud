@@ -10,8 +10,9 @@
       xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.geekbrains.geekcloud.client.MainController"
       style="-fx-background-color: linear-gradient(#fff 0%, #eee 10%, #ddd 90%, #bbb 100%);" fx:id="rootNode">
     <HBox>
-        <TextField HBox.hgrow="ALWAYS" fx:id="tfFileName" promptText="Укажите имя файла на сервере, который хотите скачать" focusTraversable="false"/>
+        <TextField HBox.hgrow="ALWAYS" fx:id="tfFileName" promptText="Укажите имя файла" focusTraversable="false"/>
         <Button text="Скачать" onAction="#pressOnDownloadBtn" />
+        <Button text="Выгрузнить" onAction="#pressOnUploadBtn" />
     </HBox>
     <ListView fx:id="filesList" VBox.vgrow="ALWAYS"/>
 </VBox>
