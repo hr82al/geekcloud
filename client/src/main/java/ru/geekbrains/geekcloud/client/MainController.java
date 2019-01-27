@@ -27,7 +27,7 @@ public class MainController implements Initializable {
     TextField tfFileName;
 
     @FXML
-    ListView<String> filesList;
+    ListView<String> clientFilesList;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -50,7 +50,7 @@ public class MainController implements Initializable {
         });
         t.setDaemon(true);
         t.start();
-        filesList.setItems(FXCollections.observableArrayList());
+        clientFilesList.setItems(FXCollections.observableArrayList());
         refreshLocalFilesList();
         initializeDragAndDropLabel();
     }
@@ -65,16 +65,16 @@ public class MainController implements Initializable {
     public void refreshLocalFilesList() {
         if (Platform.isFxApplicationThread()) {
             try {
-                filesList.getItems().clear();
-                Files.list(Paths.get("client_storage")).map(p -> p.getFileName().toString()).forEach(o -> filesList.getItems().add(o));
+                clientFilesList.getItems().clear();
+                Files.list(Paths.get("client_storage")).map(p -> p.getFileName().toString()).forEach(o -> clientFilesList.getItems().add(o));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
             Platform.runLater(() -> {
                 try {
-                    filesList.getItems().clear();
-                    Files.list(Paths.get("client_storage")).map(p -> p.getFileName().toString()).forEach(o -> filesList.getItems().add(o));
+                    clientFilesList.getItems().clear();
+                    Files.list(Paths.get("client_storage")).map(p -> p.getFileName().toString()).forEach(o -> clientFilesList.getItems().add(o));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
