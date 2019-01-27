@@ -5,6 +5,8 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.ReferenceCountUtil;
 import ru.geekbrains.common.FileMessage;
 import ru.geekbrains.common.FileRequest;
+import ru.geekbrains.common.FilesListMessage;
+import ru.geekbrains.common.FilesListRequest;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -23,9 +25,14 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                     FileMessage fm = new FileMessage(Paths.get("server_storage/" + fr.getFilename()));
                     ctx.writeAndFlush(fm);
                 }
-            }else if (msg instanceof FileMessage) {
+            }
+            else if (msg instanceof FileMessage) {
                 FileMessage fm = (FileMessage) msg;
                 Files.write(Paths.get("server_storage/" + fm.getFilename()), fm.getData(), StandardOpenOption.CREATE);
+            }
+            else if (msg instanceof FilesListRequest) {
+                FilesListMessage filesListMessage = new FilesListMessage();
+                ctx.writeAndFlush(filesListMessage);
             }
         } finally {
             ReferenceCountUtil.release(msg);

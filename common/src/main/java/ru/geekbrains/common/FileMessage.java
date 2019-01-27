@@ -7,7 +7,6 @@ import java.nio.file.Paths;
 
 public class FileMessage extends AbstractMessage {
     private String filename;
-    private String pathToFile;
     private byte[] data;
 
     public String getFilename() {
