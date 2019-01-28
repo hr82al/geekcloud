@@ -29,10 +29,10 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
             else if (msg instanceof FileMessage) {
                 FileMessage fm = (FileMessage) msg;
                 Files.write(Paths.get("server_storage/" + fm.getFilename()), fm.getData(), StandardOpenOption.CREATE);
+                ctx.writeAndFlush(new FilesListMessage());
             }
             else if (msg instanceof FilesListRequest) {
-                FilesListMessage filesListMessage = new FilesListMessage();
-                ctx.writeAndFlush(filesListMessage);
+                ctx.writeAndFlush(new FilesListMessage());
             }
         } finally {
             ReferenceCountUtil.release(msg);

@@ -21,12 +21,4 @@ public class FilesListMessage extends AbstractMessage {
     public List<String> getFiles() {
         return files;
     }
-
-    public static void main(String[] args) throws IOException {
-        Path path = Paths.get("server_storage");
-        List<Path> files = new LinkedList<>();
-        Files.newDirectoryStream(path).forEach((s) ->
-                files.add(s.getFileName()));
-        System.out.println(files);
-    }
 }

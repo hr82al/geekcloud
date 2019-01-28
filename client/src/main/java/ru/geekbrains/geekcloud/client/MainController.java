@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Control;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.Dragboard;
@@ -45,7 +46,6 @@ public class MainController implements Initializable {
                         refreshLocalFilesList();
                     }
                     else if (am instanceof FilesListMessage) {
-                        System.out.println(((FilesListMessage) am).getFiles());
                         Platform.runLater(() -> {
                             serverFilesList.getItems().clear();
                             serverFilesList.getItems().addAll(((FilesListMessage) am).getFiles());
@@ -63,7 +63,8 @@ public class MainController implements Initializable {
         //clientFilesList.setItems(FXCollections.observableArrayList());
         refreshLocalFilesList();
         refreshServerFilesList();
-        initializeDragAndDropLabel();
+        initializeDragAndDrop(tfFileName);
+        initializeDragAndDrop(serverFilesList);
     }
 
     private void refreshServerFilesList() {
@@ -116,15 +117,15 @@ public class MainController implements Initializable {
         tfFileName.clear();
     }
 
-    public void initializeDragAndDropLabel() {
-        tfFileName.setOnDragOver(event -> {
-            if (event.getGestureSource() != tfFileName && event.getDragboard().hasFiles()) {
+    public void initializeDragAndDrop(Control item) {
+        item.setOnDragOver(event -> {
+            if (event.getGestureSource() != item && event.getDragboard().hasFiles()) {
                 event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
             }
             event.consume();
         });
 
-        tfFileName.setOnDragDropped(event -> {
+        item.setOnDragDropped(event -> {
             Dragboard db = event.getDragboard();
             boolean success = false;
             if (db.hasFiles()) {
