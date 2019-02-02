@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.control.TextField?>
+<VBox fx:id="renameParent" alignment="CENTER" fx:controller="ru.geekbrains.geekcloud.client.RenameController">
+    <TextField fx:id="rename" />
+</VBox>
