@@ -3,12 +3,14 @@ package ru.geekbrains.geekcloud.client;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Control;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.geometry.Side;
+import javafx.scene.control.*;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import ru.geekbrains.common.*;
 
@@ -22,6 +24,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
+    private static final String SEND_FILE = "Отравить файл на сервер";
+
     @FXML
     TextField tfFileName;
 
@@ -65,6 +69,30 @@ public class MainController implements Initializable {
         refreshServerFilesList();
         initializeDragAndDrop(tfFileName);
         initializeDragAndDrop(serverFilesList);
+        setContextMenu(serverFilesList);
+    }
+
+    private void setContextMenu(ListView<String> item) {
+        final ContextMenu contextMenu = new ContextMenu();
+/*        contextMenu.addEventFilter(MouseEvent.MOUSE_RELEASED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (event.getButton() == MouseButton.SECONDARY) {
+                    System.out.println("right clicked");
+                    event.consume();
+                }
+            }
+        });
+        contextMenu.setOnAction((e) -> {
+            System.out.println("cl");
+        });*/
+        MenuItem menuItem1 = new MenuItem(SEND_FILE);
+        menuItem1.setOnAction(e -> {
+            System.out.println("send");
+            System.out.println(e.getSource().toString());
+        });
+        contextMenu.getItems().addAll(menuItem1);
+        item.setContextMenu(contextMenu);
     }
 
     private void refreshServerFilesList() {
