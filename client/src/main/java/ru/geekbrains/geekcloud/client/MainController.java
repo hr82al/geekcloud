@@ -2,17 +2,17 @@ package ru.geekbrains.geekcloud.client;
 
 
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.geometry.Side;
+import javafx.scene.control.*;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
-import ru.geekbrains.common.AbstractMessage;
-import ru.geekbrains.common.FileMessage;
-import ru.geekbrains.common.FileRequest;
+import ru.geekbrains.common.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,14 +20,22 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
+    private static final String SEND_FILE = "Отравить файл на сервер";
+
     @FXML
     TextField tfFileName;
 
     @FXML
     ListView<String> clientFilesList;
+
+    @FXML
+    ListView<String> serverFilesList;
+
+    private List<String> sfl;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -41,6 +49,12 @@ public class MainController implements Initializable {
                         Files.write(Paths.get("client_storage/" + fm.getFilename()), fm.getData(), StandardOpenOption.CREATE);
                         refreshLocalFilesList();
                     }
+                    else if (am instanceof FilesListMessage) {
+                        Platform.runLater(() -> {
+                            serverFilesList.getItems().clear();
+                            serverFilesList.getItems().addAll(((FilesListMessage) am).getFiles());
+                        });
+                    }
                 }
             } catch (ClassNotFoundException | IOException e) {
                 e.printStackTrace();
@@ -50,9 +64,45 @@ public class MainController implements Initializable {
         });
         t.setDaemon(true);
         t.start();
-        clientFilesList.setItems(FXCollections.observableArrayList());
+        //clientFilesList.setItems(FXCollections.observableArrayList());
         refreshLocalFilesList();
-        initializeDragAndDropLabel();
+        refreshServerFilesList();
+        initializeDragAndDrop(tfFileName);
+        initializeDragAndDrop(serverFilesList);
+        setContextMenu(serverFilesList);
+    }
+
+    private void setContextMenu(ListView<String> item) {
+        final ContextMenu contextMenu = new ContextMenu();
+/*        contextMenu.addEventFilter(MouseEvent.MOUSE_RELEASED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (event.getButton() == MouseButton.SECONDARY) {
+                    System.out.println("right clicked");
+                    event.consume();
+                }
+            }
+        });
+        contextMenu.setOnAction((e) -> {
+            System.out.println("cl");
+        });*/
+        MenuItem menuItem1 = new MenuItem(SEND_FILE);
+        menuItem1.setOnAction(e -> {
+            System.out.println("send");
+            System.out.println(e.getSource().toString());
+        });
+        contextMenu.getItems().addAll(menuItem1);
+        item.setContextMenu(contextMenu);
+    }
+
+    private void refreshServerFilesList() {
+            if (Platform.isFxApplicationThread()) {
+                Network.sendMsg(new FilesListRequest());
+            } else {
+                Platform.runLater(() -> {
+                    Network.sendMsg(new FilesListRequest());;
+                });
+            }
     }
 
     public void pressOnDownloadBtn(ActionEvent actionEvent) {
@@ -95,15 +145,15 @@ public class MainController implements Initializable {
         tfFileName.clear();
     }
 
-    public void initializeDragAndDropLabel() {
-        tfFileName.setOnDragOver(event -> {
-            if (event.getGestureSource() != tfFileName && event.getDragboard().hasFiles()) {
+    public void initializeDragAndDrop(Control item) {
+        item.setOnDragOver(event -> {
+            if (event.getGestureSource() != item && event.getDragboard().hasFiles()) {
                 event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
             }
             event.consume();
         });
 
-        tfFileName.setOnDragDropped(event -> {
+        item.setOnDragDropped(event -> {
             Dragboard db = event.getDragboard();
             boolean success = false;
             if (db.hasFiles()) {
