@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="ru.geekbrains.geekcloud.client.Login"
+            fx:id="globParent">
+    <VBox>
+        <Label text="Логин:"/>
+        <Label text="Пароль:"/>
+    </VBox>
+    <VBox>
+        <TextField fx:id="loginTF" promptText="Введите ваш логин" onAction="#pressOnLoginTF"/>
+        <PasswordField fx:id="passwordPF" promptText="Введите ваш пароль" onAction="#pressOnPasswordPF"/>
+    </VBox>
+</HBox>

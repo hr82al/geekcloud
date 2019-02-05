@@ -8,7 +8,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -18,14 +17,12 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ru.geekbrains.common.*;
 
-import javax.swing.text.html.Option;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -45,13 +42,15 @@ public class MainController implements Initializable {
     @FXML
     ListView<String> serverFilesList;
 
-    private List<String> sfl;
+    @FXML
+    Label statusBar;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Network.start();
         Thread t = new Thread(() -> {
             try {
+                authorize();
                 while (true) {
                     AbstractMessage am = Network.readObject();
                     if (am instanceof FileMessage) {
@@ -68,6 +67,9 @@ public class MainController implements Initializable {
                     else if (am instanceof DeleteFileMessage) {
                         refreshServerFilesList();
                     }
+                    else if (am instanceof StatusMessage) {
+                        setStatusBarMessage(((StatusMessage) am).getMessage());
+                    }
                 }
             } catch (ClassNotFoundException | IOException e) {
                 e.printStackTrace();
@@ -83,6 +85,42 @@ public class MainController implements Initializable {
         initializeDragAndDrop(serverFilesList);
         setServerContextMenu();
         setClientContextMenu();
+    }
+
+    private void setStatusBarMessage(String message) {
+        if (Platform.isFxApplicationThread()) {
+            statusBar.setText(message);
+        }
+        else {
+            Platform.runLater(() -> {
+                statusBar.setText(message);
+            });
+        }
+    }
+
+    private void authorize() throws IOException{
+        if (Platform.isFxApplicationThread()) {
+            Stage stage = new Stage();
+            Parent root = FXMLLoader.load(getClass().getResource("/login.fxml"));
+            stage.setScene(new Scene(root));
+            stage.setTitle("Авторизация на сервере");
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.showAndWait();
+        } else {
+            Platform.runLater(() -> {
+                try {
+                    Stage stage = new Stage();
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/login.fxml"));
+                    Parent root = loader.load();
+                    stage.setScene(new Scene(root));
+                    stage.setTitle("Авторизация на сервере");
+                    stage.initModality(Modality.APPLICATION_MODAL);
+                    stage.showAndWait();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
     }
 
     private void setClientContextMenu() {
@@ -262,5 +300,13 @@ public class MainController implements Initializable {
             event.setDropCompleted(success);
             event.consume();
         });
+    }
+
+    public void pressOnLogin(ActionEvent actionEvent) {
+        try {
+            authorize();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
