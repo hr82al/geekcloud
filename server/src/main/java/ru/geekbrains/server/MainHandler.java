@@ -37,6 +37,13 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                 Files.delete(Paths.get(SERVER_FOLDER +df.getFilename()));
                 ctx.writeAndFlush(new DeleteFileMessage());
             }
+            else if (msg instanceof RenameFileRequest) {
+                RenameFileRequest rf = (RenameFileRequest) msg;
+                System.out.println(((RenameFileRequest) msg).getNewFileName());
+                Files.move(Paths.get(SERVER_FOLDER + rf.getOldFileName()),
+                        Paths.get(SERVER_FOLDER + rf.getNewFileName()));
+                ctx.writeAndFlush(new FilesListMessage());
+            }
         } finally {
             ReferenceCountUtil.release(msg);
         }

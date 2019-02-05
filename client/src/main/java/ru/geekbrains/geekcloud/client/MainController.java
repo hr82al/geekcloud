@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -17,6 +18,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ru.geekbrains.common.*;
 
+import javax.swing.text.html.Option;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -24,6 +26,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
@@ -128,21 +131,29 @@ public class MainController implements Initializable {
 
         MenuItem menuItem3 = new MenuItem(RENAME_FILE);
         menuItem3.setOnAction(e -> {
-            try {
-                Stage stage = new Stage();
-                //FXMLLoader loader = new FXMLLoader(getClass().getResource("/Rename.fxml"));
-                Parent root = FXMLLoader.load(getClass().getResource("/Rename "));
-                //RenameController renameController = (RenameController) loader.getController();
-                stage.setTitle("Переименование");
-                stage.setScene(new Scene(root, 300, 100));
-                stage.initModality(Modality.APPLICATION_MODAL);
-                stage.showAndWait();
-            } catch (IOException e1) {
-                e1.printStackTrace();
+            TextInputDialog dialog = new TextInputDialog(serverFilesList.
+                    getSelectionModel().getSelectedItem());
+            dialog.setTitle("Переименование фала");
+            dialog.setHeaderText("Введите новое имя файла");
+            dialog.setContentText("Новое имя файла:");
+            Optional<String> newFileName = dialog.showAndWait();
+            if (newFileName.isPresent()) {
+                renameServerFile(serverFilesList.getSelectionModel().getSelectedItem(), newFileName.get());
             }
         });
+
         contextMenu.getItems().addAll(menuItem1, menuItem2, menuItem3);
         serverFilesList.setContextMenu(contextMenu);
+    }
+
+    private void renameServerFile(String oldFileName, String newFileName) {
+        if (Platform.isFxApplicationThread()) {
+            Network.sendMsg(new RenameFileRequest(oldFileName, newFileName));
+        } else {
+            Platform.runLater(() -> {
+                Network.sendMsg(new RenameFileRequest(oldFileName, newFileName));
+            });
+        }
     }
 
     private void refreshServerFilesList() {

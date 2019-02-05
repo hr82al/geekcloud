@@ -1,13 +1,19 @@
 package ru.geekbrains.common;
 
-public class RenameFileRequest {
-    private String newFilename;
+public class RenameFileRequest extends AbstractMessage {
+    private String oldFileName;
+    private String newFileName;
 
-    public RenameFileRequest(String filename) {
-        newFilename = filename;
+    public RenameFileRequest(String oldFileName, String newFileName) {
+        this.oldFileName = oldFileName;
+        this.newFileName = newFileName;
     }
 
-    public String getNewFilename() {
-        return newFilename;
+    public String getOldFileName() {
+        return oldFileName;
+    }
+
+    public String getNewFileName() {
+        return newFileName;
     }
 }
