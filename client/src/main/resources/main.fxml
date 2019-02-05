@@ -14,9 +14,11 @@
         <TextField HBox.hgrow="ALWAYS" fx:id="tfFileName" promptText="Укажите имя файла" focusTraversable="false"/>
         <Button text="Скачать" onAction="#pressOnDownloadBtn" />
         <Button text="Выгрузнить" onAction="#pressOnUploadBtn" />
+        <Button text="Вход" onAction="#pressOnLogin"/>
     </HBox>
     <Label text="Список файлов на комьютере." VBox.vgrow="ALWAYS"/>
     <ListView fx:id="clientFilesList" VBox.vgrow="ALWAYS"/>
     <Label text="Список фалнов на сервере." VBox.vgrow="ALWAYS"/>
     <ListView fx:id="serverFilesList" VBox.vgrow="ALWAYS"/>
+    <Label fx:id="statusBar" VBox.vgrow="ALWAYS"/>
 </VBox>
